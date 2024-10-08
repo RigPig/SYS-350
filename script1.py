@@ -1,3 +1,7 @@
+"""
+I adapted code from the pyvmomi community samples: https://github.com/vmware/pyvmomi-community-samples/tree/master
+I also utilized the Python GPT created by Nicholas Barker: https://www.linkedin.com/in/nickabarker/
+"""
 import json
 from pyVim.connect import SmartConnect, Disconnect
 import ssl
@@ -28,12 +32,11 @@ def get_session_info(service_instance, vcenter_host):
 
 
 
-#Function to search VMs and return their relevant data (name, state, CPUs, memory, and IP)
+#Function to search VMs and return their relevant data (name, state, CPUs, memory, and IP) 
+#get_vm_storage_policy.py sample utilized, getallvms.py sample utilized
 def get_vm_data(service_instance, search_name=None):
     content = service_instance.RetrieveContent()
-    vm_view = content.viewManager.CreateContainerView(
-        content.rootFolder, [vim.VirtualMachine], True
-    )
+    vm_view = content.viewManager.CreateContainerView(content.rootFolder, [vim.VirtualMachine], True)
     vms = vm_view.view #list of all VMs in vCenter
     filtered_vms = [] #store filtered VMs
 
@@ -46,7 +49,7 @@ def get_vm_data(service_instance, search_name=None):
     vm_view.Destroy()
     for vm in filtered_vms:
         print_vm_data(vm)
-
+#getallvms.py sample utilized
 def print_vm_data(vm):
     summary = vm.summary
     guest = vm.guest
@@ -61,11 +64,11 @@ def print_vm_data(vm):
     else:
         ip_address = "VMware Tools not running or no IP"
 
-        print(f"VM Name: {vm_name}")
-        print(f"Power State: {power_state}")
-        print(f"Number of CPUs: {num_cpus}")
-        print(f"Memory: {memory_gb:.2f} GB")
-        print(f"IP Address: {ip_address}")
+    print(f"VM Name: {vm_name}")
+    print(f"Power State: {power_state}")
+    print(f"Number of CPUs: {num_cpus}")
+    print(f"Memory: {memory_gb:.2f} GB")
+    print(f"IP Address: {ip_address}")
         
 if __name__ == "__main__":
     config_file = 'vcenterconfig.json'
